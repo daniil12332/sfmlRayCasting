@@ -8,7 +8,7 @@ using namespace sf;
 
 int main() {
 	RenderWindow window(VideoMode({800, 600}), "Ray casting", Style::Default, State::Windowed);
-	bool mapMode = true;
+	bool mapMode = false;
 
 	Map map;
 	RectangleShape shape;
@@ -29,6 +29,10 @@ int main() {
 	double lineAngle = player.angle-FOV/2;
 	float lineLength = 0;
 
+	Clock clock;
+	Time delta_time = clock.getElapsedTime();
+	int fps;
+
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<Event::Closed>())
@@ -36,11 +40,11 @@ int main() {
 		}
 
 		if (Keyboard::isKeyPressed(Keyboard::Key::W))
-			player.move_forward();
+			player.move_forward(delta_time.asSeconds());
 		if (Keyboard::isKeyPressed(Keyboard::Key::A))
-			player.look_left();
+			player.look_left(delta_time.asSeconds());
 		if (Keyboard::isKeyPressed(Keyboard::Key::D))
-			player.look_right();
+			player.look_right(delta_time.asSeconds());
 
 		if (Keyboard::isKeyPressed(Keyboard::Key::Escape))
 			window.close();
@@ -86,5 +90,9 @@ int main() {
 		}
 
 		window.display();
+
+		fps = 1/delta_time.asSeconds();
+		delta_time = clock.getElapsedTime();
+		clock.restart();
 	}
 }

@@ -10,11 +10,11 @@ class Player {
 
     Player(float x, float y, float angle = 0);
 
-    void move_forward();
-    void move_back();
-    void move_right();
-    void move_left();
+    void move_forward(float delta_time);
+    void move_back(float delta_time);
+    void move_right(float delta_time);
+    void move_left(float delta_time);
     
-    void look_right();
-    void look_left();
+    void look_right(float delta_time);
+    void look_left(float delta_time);
 };
