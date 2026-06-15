@@ -75,7 +75,7 @@ int main() {
 							viewLines[1].position = Vector2f(lineX, lineY);
 							window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);
 						} else {
-							lineLength = window.getSize().y/rangeToWall;
+							lineLength = 10000/rangeToWall;
 							viewLines[0].position = Vector2f(ray, window.getSize().y/2 - lineLength/2);
 							viewLines[1].position = Vector2f(ray, window.getSize().y/2 + lineLength/2);
 							window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);

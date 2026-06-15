@@ -2,7 +2,7 @@
 #include <cmath>
 
 Player::Player(float x, float y, float angle): x(x), y(y), angle(angle) {
-    step = 50;
+    step = 75;
     angle_step = 50.0f*M_PI/180;
 }
 
