@@ -8,7 +8,7 @@ using namespace sf;
 
 int main() {
 	RenderWindow window(VideoMode({800, 600}), "Ray casting", Style::Default, State::Windowed);
-	bool mapMode = false;
+	bool mapMode = true;
 
 	Map map;
 	RectangleShape shape;
@@ -33,9 +33,17 @@ int main() {
 		while (const std::optional event = window.pollEvent()) {
 			if (event->is<Event::Closed>())
 				window.close();
-			if (event->is<Event::KeyPressed>())
-				window.close();
 		}
+
+		if (Keyboard::isKeyPressed(Keyboard::Key::W))
+			player.move_forward();
+		if (Keyboard::isKeyPressed(Keyboard::Key::A))
+			player.look_left();
+		if (Keyboard::isKeyPressed(Keyboard::Key::D))
+			player.look_right();
+
+		if (Keyboard::isKeyPressed(Keyboard::Key::Escape))
+			window.close();
 
 		window.clear();
 
@@ -59,10 +67,11 @@ int main() {
 				for (int wallIndex = 0; wallIndex < map.size(); wallIndex++) {
 					if (map.get(wallIndex).isCollision(lineX, lineY)) {
 						if (mapMode) {
+							viewLines[0].position = Vector2f(player.x, player.y);
 							viewLines[1].position = Vector2f(lineX, lineY);
 							window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);
 						} else {
-							lineLength = 50000/rangeToWall;
+							lineLength = window.getSize().y/rangeToWall;
 							viewLines[0].position = Vector2f(ray, window.getSize().y/2 - lineLength/2);
 							viewLines[1].position = Vector2f(ray, window.getSize().y/2 + lineLength/2);
 							window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);

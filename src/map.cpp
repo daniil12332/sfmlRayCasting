@@ -7,9 +7,9 @@ int Wall::getW() { return w; }
 int Wall::getH() { return h; }
 bool Wall::isCollision(int objX, int objY) {
     if (objX < x) return false;
-    if (objX > x+w) return false;
+    if (objX >= x+w) return false;
     if (objY < y) return false;
-    if (objY > y+h) return false;
+    if (objY >= y+h) return false;
     return true;
 }
 
