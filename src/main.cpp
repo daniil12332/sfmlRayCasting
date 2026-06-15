@@ -8,7 +8,7 @@ using namespace sf;
 
 int main() {
 	RenderWindow window(VideoMode({800, 600}), "Ray casting", Style::Default, State::Windowed);
-	bool mapMode = true;
+	bool mapMode = false;
 
 	Map map;
 	RectangleShape shape;
@@ -24,8 +24,10 @@ int main() {
 		Vertex{Vector2f(player.x, player.y)},
 		Vertex{Vector2f(lineX, lineY)}
 	};
+
 	double lineFOVstep = FOV/window.getSize().x;
 	double lineAngle = player.angle-FOV/2;
+	float lineLength = 0;
 
 	while (window.isOpen()) {
 		while (const std::optional event = window.pollEvent()) {
@@ -49,18 +51,27 @@ int main() {
 		}
 
 		lineAngle = player.angle - FOV/2;
-		for (int ray = 0; ray < window.getSize().x; ray++) {
+		for (int ray = 1; ray <= window.getSize().x; ray++) {
 			for (int rangeToWall = 0; rangeToWall < 10000; rangeToWall++) {
 				lineX = player.x + cos(lineAngle)*rangeToWall;
 				lineY = player.y + sin(lineAngle)*rangeToWall;
+
 				for (int wallIndex = 0; wallIndex < map.size(); wallIndex++) {
 					if (map.get(wallIndex).isCollision(lineX, lineY)) {
-						viewLines[1].position = Vector2f(lineX, lineY);
-						window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);
+						if (mapMode) {
+							viewLines[1].position = Vector2f(lineX, lineY);
+							window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);
+						} else {
+							lineLength = 50000/rangeToWall;
+							viewLines[0].position = Vector2f(ray, window.getSize().y/2 - lineLength/2);
+							viewLines[1].position = Vector2f(ray, window.getSize().y/2 + lineLength/2);
+							window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);
+						}
 						rangeToWall = 10001;
 						break;
 					}
 				}
+
 			}
 			lineAngle += lineFOVstep;
 		}
