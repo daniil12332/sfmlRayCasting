@@ -15,7 +15,7 @@ int main() {
 	shape.setFillColor(Color::Green);
 	map.add_base_box(window.getSize().x, window.getSize().y, 100);
 
-	Player player(200, 200, 30.f*M_PI/180);
+	Player player(200, 200, 75.f*M_PI/180);
 	CircleShape playerShape(10.0f);
 
 	float lineX = player.x;
@@ -50,12 +50,16 @@ int main() {
 
 		lineAngle = player.angle - FOV/2;
 		for (int ray = 0; ray < window.getSize().x; ray++) {
-			for (int rangeToWall = 0; rangeToWall < 200; rangeToWall++) {
+			for (int rangeToWall = 0; rangeToWall < 10000; rangeToWall++) {
 				lineX = player.x + cos(lineAngle)*rangeToWall;
 				lineY = player.y + sin(lineAngle)*rangeToWall;
 				for (int wallIndex = 0; wallIndex < map.size(); wallIndex++) {
-					viewLines[1].position = Vector2f(lineX, lineY);
-					window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);
+					if (map.get(wallIndex).isCollision(lineX, lineY)) {
+						viewLines[1].position = Vector2f(lineX, lineY);
+						window.draw(viewLines.data(), viewLines.size(), PrimitiveType::Lines);
+						rangeToWall = 10001;
+						break;
+					}
 				}
 			}
 			lineAngle += lineFOVstep;

@@ -13,6 +13,7 @@ class Wall {
     float getY();
     int getW();
     int getH();
+    bool isCollision(int x, int y);
 };
 
 class Map {
